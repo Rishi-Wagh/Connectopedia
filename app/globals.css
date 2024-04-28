@@ -2,6 +2,33 @@
   @tailwind components;
   @tailwind utilities;
 
+  .cl-socialButtonsBlockButtonText{
+    color: white;
+  }
+
+  .cl-userButtonPopoverActionButtonIcon {
+    color: white;
+  }
+  
+  .cl-logoBox {
+    height: 40px;
+  }
+  .cl-dividerLine {
+    background: #252a41;
+    height: 2px;
+  }
+  
+  .cl-socialButtonsIconButton {
+    border: 3px solid #565761;
+  }
+  
+  .cl-internal-wkkub3 {
+    color: white;
+  }
+  .cl-userButtonPopoverActionButton {
+    color: white;
+  }
+
   @layer utlities {
     .flex-center {
       @apply flex justify-center items-center;
@@ -10,7 +37,6 @@
       @apply flex justify-between items-center;
     }
   }
-
 
   @layer base {
     :root {
