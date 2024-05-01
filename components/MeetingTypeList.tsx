@@ -1,20 +1,71 @@
 'use client'
 
-import Image from 'next/image'
 import React  from 'react'
 import HomeCard from './HomeCard'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import MeetingModel from './MeetingModel'
-
+import { useUser } from '@clerk/nextjs'
+import { Call, useStreamVideoClient } from '@stream-io/video-react-sdk'
+import { useToast } from '@/components/ui/use-toast'
 
 const MeetingTypeList = () => {
   const router = useRouter();
   const [meetingState, setMeetingState] = useState
     <'isScheduleMeeting' | 'isJoiningMeeting' | 'isInstantMeeting' | undefined>()
-  
-  const createMeeting =() =>{
-    console.log('hello')
+
+  const { user } = useUser();
+  const client = useStreamVideoClient();
+  const [values , setValues] = useState({
+    dateTime: new Date(),
+    description: '',
+    link: ''
+  })
+  const [callDetails , setCallDetails] = useState<Call>();
+    const { toast } = useToast();
+
+    const createMeeting = async() =>{
+    if(!user || !client) return;
+
+    try {
+      if(!values.dateTime) {
+        toast({
+          title: "Please select a date and time", })
+          return;
+      }
+      const id = crypto.randomUUID();
+      const call = client.call('default', id);
+
+      if(!call) throw new Error("Failed to create a call");
+
+      const startsAt = values.dateTime.toISOString() || new Date(Date.now()).toISOString();
+      const description = values.description || 'Instant Meeting';
+
+      await call.getOrCreate({
+        data: {
+          starts_at: startsAt,
+          custom: {
+            description
+          }
+        }
+      })
+
+      setCallDetails(call);
+
+      if(!values.description) {
+        router.push(`/meeting/${call.id}`)
+      }
+
+      toast({
+        title: "Meeting Created", })
+        
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error,
+      })
+    }
+
   }
     
   return (
@@ -46,11 +97,11 @@ const MeetingTypeList = () => {
        img="/icons/join-meeting.svg"
        title='Join meeting'
        description='via invitation link'
-       handleClick={()=> setMeetingState('isJoiningMeeting')} />
+       handleClick={()=> setMeetingState('isInstantMeeting')} />
 
 
        <MeetingModel 
-          isOpen ={meetingState === 'isInstantMeeting'}
+          isOpen ={meetingState === 'isJoiningMeeting' }
           onClose={()=> setMeetingState(undefined)}
           title="Start an Instant Meeting"
           className="text-center"

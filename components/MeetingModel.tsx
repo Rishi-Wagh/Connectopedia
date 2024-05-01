@@ -36,7 +36,7 @@ const MeetingModel = ({isOpen ,onClose , title ,className , children , handleCli
                  <Image src={image} alt="image" width={72} height={72} />
                </div>
             )}
-             <h1 className={cn(style, className)}></h1>
+             <h1 className={cn(style, className)}>{title}</h1>
              {children}
              <Button className='bg-blue-1 focus-visible:ring-0 focus-visible:ring-offset-0'
              onClick={handleClick}>
