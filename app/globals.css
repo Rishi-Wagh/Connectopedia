@@ -78,6 +78,10 @@
   color: white;
 }
 
+.cl-socialButtonsBlockButtonText {
+   color: white;
+}
+
 /* =============================== */
 
 @layer utilities {
