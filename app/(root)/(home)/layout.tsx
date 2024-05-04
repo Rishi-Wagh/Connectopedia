@@ -1,6 +1,15 @@
 import Navbar from '@/components/ui/Navbar'
 import Sidebar from '@/components/ui/Sidebar'
 import React, { ReactNode } from 'react'
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Conectopedia",
+  description: "Video app connecting people",
+  icons: {
+    icon: '/icons/logo.svg'
+  }
+};
 
 const HomeLayout = ({ children }: { children: ReactNode }) => {
   return (
